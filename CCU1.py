@@ -40,12 +40,12 @@ if response.status_code == 200:
     loaded_df['client'] = loaded_df['client'].astype(str)
     loaded_df['client'] = loaded_df['client'].replace(np.setdiff1d(loaded_df.client.unique(), ['category1', 'categry2']), 'category3')
     loaded_df = loaded_df[loaded_df['client'] != 'category3']
-    loaded_df = loaded_df[loaded_df['status'] != 'server_crashed']
+    loaded_df = loaded_df[loaded_df['status'] != 'error2']
     loaded_df['launch_date'] = loaded_df['start_at'].dt.date
     loaded_df['end_date'] = loaded_df['end_at'].dt.date
     loaded_df["minutes"] = pd.to_timedelta(loaded_df["start_minute_bucket"] + ":00").dt.total_seconds() // 60
     loaded_df["minute"] = (loaded_df["minutes"] // 60) % 24 * 60 + loaded_df["minutes"] % 60
-    loaded_df.loc[loaded_df['status'] == 'session_inactive_timeout', 'duration_minutes'] = loaded_df['duration_minutes'].sub(15).clip(lower=0)
+    loaded_df.loc[loaded_df['status'] == 'error3', 'duration_minutes'] = loaded_df['duration_minutes'].sub(15).clip(lower=0)
     loaded_df.dropna(subset=['minute'], inplace=True)
     loaded_df.dropna(subset=['duration_minutes'], inplace=True)
     loaded_df.drop(loaded_df[loaded_df['minute'] > 1440].index, inplace=True)
